@@ -34,15 +34,15 @@ def get_temp_data(data):
 
 # 提取国内疫情所需数据
 def get_china_data(data):
-    china_data = []
+    china_data = {"add": {}, "total": {}}
     for item in data:
         need_key = [
             'confirm', 'dead', 'nowConfirm', 'importedCase', 'noInfect',
             'localConfirm'
         ]
         for item in need_key:
-            china_data.append({'chinaAdd': data['chinaAdd'][item]})
-            china_data.append({'chinaTotal': data['chinaTotal'][item]})
+            china_data['add'][item] = data['chinaAdd'][item]
+            china_data['total'][item] = data['chinaTotal'][item]
     return china_data
 
 
