@@ -34,15 +34,15 @@ def get_temp_data(data):
 
 # 提取国内疫情所需数据
 def get_china_data(data):
-    china_data = {"add": {}, "total": {}}
+    china_data = [{}, {}]
     for item in data:
         need_key = [
             'confirm', 'dead', 'nowConfirm', 'importedCase', 'noInfect',
             'localConfirm'
         ]
         for item in need_key:
-            china_data['add'][item] = data['chinaAdd'][item]
-            china_data['total'][item] = data['chinaTotal'][item]
+            china_data[0][item] = data['chinaAdd'][item]
+            china_data[1][item] = data['chinaTotal'][item]
     return china_data
 
 
@@ -64,17 +64,14 @@ def get_province_data(province_temp_data):
 def get_city_data(province_temp_data):
     city_data = []
     for p in province_temp_data:
-        city_data_item = []
         for c in p['children']:
-            city_data_item.append({
+            city_data.append({
                 "name": c['name'],
                 "province": p['name'],
                 "confirm": c['today']['confirm'],
                 "nowConfirm": c['total']['nowConfirm'],
                 "grade": c['total']['grade'],
             })
-        if (len(city_data_item) > 0):
-            city_data.append(city_data_item)
     return city_data
 
 
@@ -91,6 +88,10 @@ if __name__ == '__main__':
     china_data = get_china_data(data)
     province_data = get_province_data(province_temp_data)
     city_data = get_city_data(province_temp_data)
-    write_json('china_data', china_data)
-    write_json('province_data', province_data)
-    write_json('city_data', city_data)
+    all_data = {
+        'lastUpdateTime': data['lastUpdateTime'],
+        'china_data': china_data,
+        'province_data': province_data,
+        'city_data': city_data
+    }
+    write_json('all_data', all_data)
