@@ -28,9 +28,6 @@ for item in data['areaTree'][0]['children']:
             province_data_item['children'].append(i)
     province_temp_data.append(province_data_item)
 
-with open('province_temp_data.json', 'w', encoding='utf-8') as f:
-    f.write(json.dumps(province_temp_data, ensure_ascii=False))
-
 # 提取国内疫情所需数据
 for item in data:
     need_key = [
@@ -41,7 +38,8 @@ for item in data:
         china_data['add'][item] = data['chinaAdd'][item]
         china_data['total'][item] = data['chinaTotal'][item]
 
-with open('china_data.json', 'w', encoding='utf-8') as f:
+with open('../Barrier-Server/static/china_data.json', 'w',
+          encoding='utf-8') as f:
     f.write(json.dumps(china_data, ensure_ascii=False))
 
 # 提取省疫情所需数据
@@ -54,7 +52,8 @@ for item in province_temp_data:
         "dead": item['total']['dead'],
     })
 
-with open('province_data.json', 'w', encoding='utf-8') as f:
+with open('../Barrier-Server/static/province_data.json', 'w',
+          encoding='utf-8') as f:
     f.write(json.dumps(province_data, ensure_ascii=False))
 
 # 提取市疫情所需数据
@@ -71,5 +70,6 @@ for p in province_temp_data:
     if (len(city_data_item) > 0):
         city_data.append(city_data_item)
 
-with open('city_data.json', 'w', encoding='utf-8') as f:
+with open('../Barrier-Server/static/city_data.json', 'w',
+          encoding='utf-8') as f:
     f.write(json.dumps(city_data, ensure_ascii=False))
