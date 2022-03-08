@@ -1,0 +1,16 @@
+[
+  // data.chinaAdd
+  {
+    "confirm": 6111, // 累计确诊add
+    "heal": 498,
+    "dead": 280, // 累计死亡add
+    "nowConfirm": 5333, // 现有确诊（含港澳台）add
+    "suspect": -1,
+    "nowSevere": -2,
+    "importedCase": 150, // 境外输入add
+    "noInfect": 443, // 无症状感染者add
+    "localConfirm": 142,
+    "noInfectH5": 330,
+    "localConfirmH5": 197 // 本土现有确诊add
+  }
+]
