@@ -91,6 +91,6 @@ if __name__ == '__main__':
     china_data = get_china_data(data)
     province_data = get_province_data(province_temp_data)
     city_data = get_city_data(province_temp_data)
-    write_json('china_datac', china_data)
+    write_json('china_data', china_data)
     write_json('province_data', province_data)
     write_json('city_data', city_data)
