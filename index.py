@@ -2,6 +2,7 @@
 
 import json
 import time
+import util
 import requests
 
 
@@ -77,13 +78,6 @@ def get_city_data(province_temp_data):
     return city_data
 
 
-def write_json(dir, data):
-    with open('../Guard-Server/static/{}.json'.format(dir),
-              'w',
-              encoding='utf-8') as f:
-        f.write(json.dumps(data, ensure_ascii=False))
-
-
 if __name__ == '__main__':
     data = get_data()
     province_temp_data = get_temp_data(data)
@@ -96,4 +90,4 @@ if __name__ == '__main__':
         'province_data': province_data,
         'city_data': city_data
     }
-    write_json('all_data', all_data)
+    util.write_json('all_data', all_data)
