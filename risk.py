@@ -58,6 +58,5 @@ def get_risk_area():
     headers = get_risk_headers(timestamp)
     payload = get_risk_payload(timestamp)
     url = "http://103.66.32.242:8005/zwfwMovePortal/interface/interfaceJson"
-    data = requests.post(url, headers=headers, json=payload)
-    response_json = data.json()
-    return response_json
+    data = requests.post(url, headers=headers, json=payload).json()['data']
+    return data
