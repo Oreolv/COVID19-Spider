@@ -103,6 +103,14 @@ def transform_risk_area(data):
     return new_data
 
 
+def add_id_risk_area(data):
+    for i in range(len(data['highlist'])):
+        data['highlist'][i]['id'] = i
+    for i in range(len(data['middlelist'])):
+        data['middlelist'][i]['id'] = i
+    return data
+
+
 def get_risk_area():
     timestamp = get_timestamp()
     headers = get_risk_headers(timestamp)
@@ -110,4 +118,5 @@ def get_risk_area():
     url = "http://103.66.32.242:8005/zwfwMovePortal/interface/interfaceJson"
     data = requests.post(url, headers=headers, json=payload).json()['data']
 
-    return transform_risk_area(data)
+    # return transform_risk_area(data)
+    return add_id_risk_area(data)
