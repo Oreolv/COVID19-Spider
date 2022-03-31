@@ -56,28 +56,38 @@ def get_risk_headers(timestamp):
 def merge_same_province(data):
     province_data = []
     new_data = []
+    children_index = 0
     for i in data:
+        city_list = []
+
         if i['province'] not in province_data:
-            city_list = []
+            children_index = 1
+
             province_data.append(i['province'])
+            index = len(province_data)
             city_list.append({
+                "id": children_index,
                 "city": i['city'],
                 "county": i['county'],
                 "area_name": i['area_name'],
                 "communitys": i['communitys'],
             })
-            new_data.append({"province": i['province'], 'children': city_list})
+            new_data.append({
+                "id": index,
+                "province": i['province'],
+                'children': city_list
+            })
         else:
+            children_index = children_index + 1
             index = province_data.index(i['province'])
-            city_list = []
             city_list.append({
+                "id": children_index,
                 "city": i['city'],
                 "county": i['county'],
                 "area_name": i['area_name'],
                 "communitys": i['communitys'],
             })
             new_data[index]['children'].append(city_list[0])
-
     return new_data
 
 
