@@ -3,6 +3,7 @@
 import json
 import time
 import util
+import risk
 import requests
 
 
@@ -91,3 +92,6 @@ if __name__ == '__main__':
         'city_data': city_data
     }
     util.write_json('all_data', all_data)
+
+    risk_area = risk.get_risk_area()
+    util.write_json('risk_area', risk_area)
