@@ -53,10 +53,51 @@ def get_risk_headers(timestamp):
     return headers
 
 
+def merge_same_province(data):
+    province_data = []
+    new_data = []
+    for i in data:
+        if i['province'] not in province_data:
+            city_list = []
+            province_data.append(i['province'])
+            city_list.append({
+                "city": i['city'],
+                "county": i['county'],
+                "area_name": i['area_name'],
+                "communitys": i['communitys'],
+            })
+            new_data.append({"province": i['province'], 'children': city_list})
+        else:
+            index = province_data.index(i['province'])
+            city_list = []
+            city_list.append({
+                "city": i['city'],
+                "county": i['county'],
+                "area_name": i['area_name'],
+                "communitys": i['communitys'],
+            })
+            new_data[index]['children'].append(city_list[0])
+
+    return new_data
+
+
+def transform_risk_area(data):
+    new_data = {}
+    highlist = merge_same_province(data['highlist'])
+    middlelist = merge_same_province(data['middlelist'])
+    new_data['end_update_time'] = data['end_update_time']
+    new_data['hcount'] = data['hcount']
+    new_data['mcount'] = data['mcount']
+    new_data['highlist'] = highlist
+    new_data['middlelist'] = middlelist
+    return new_data
+
+
 def get_risk_area():
     timestamp = get_timestamp()
     headers = get_risk_headers(timestamp)
     payload = get_risk_payload(timestamp)
     url = "http://103.66.32.242:8005/zwfwMovePortal/interface/interfaceJson"
     data = requests.post(url, headers=headers, json=payload).json()['data']
-    return data
+
+    return transform_risk_area(data)
