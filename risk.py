@@ -120,3 +120,14 @@ def get_risk_area():
 
     # return transform_risk_area(data)
     return add_id_risk_area(data)
+
+
+def get_risk_area_merge():
+    timestamp = get_timestamp()
+    headers = get_risk_headers(timestamp)
+    payload = get_risk_payload(timestamp)
+    url = "http://103.66.32.242:8005/zwfwMovePortal/interface/interfaceJson"
+    data = requests.post(url, headers=headers, json=payload).json()['data']
+
+    # return transform_risk_area(data)
+    return transform_risk_area(data)
