@@ -115,9 +115,13 @@ def get_risk_area():
     timestamp = get_timestamp()
     headers = get_risk_headers(timestamp)
     payload = get_risk_payload(timestamp)
-    url = "http://103.66.32.242:8005/zwfwMovePortal/interface/interfaceJson"
+    url = "https://bmfw.www.gov.cn/bjww/interface/interfaceJson"
     data = requests.post(url, headers=headers, json=payload).json()['data']
 
+    last_data = util.read_json_data('risk_area')
+    if last_data['end_update_time'] != data['end_update_time']:
+        data['last_hcount'] = last_data['hcount']
+        data['last_mcount'] = last_data['mcount']
     # return transform_risk_area(data)
     return add_id_risk_area(data)
 
