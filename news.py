@@ -1,5 +1,6 @@
 import util
 import requests
+from lxml import etree
 
 
 # 通过新浪新闻获取新闻数据
@@ -17,11 +18,29 @@ def transform_news_data(data):
     ret = []
     for i in data:
         item = {}
+        if ('stream' in i['info']):
+            continue
         item['title'] = i['info']['title']
         item['summary'] = i['info']['intro']
         item['sourceURL'] = i['base']['base']['url']
         item['infoSource'] = i['info']['mediaInfo']['name']
         item['publishTime'] = i['info']['showTime']
-        data.append(item)
+        ret.append(item)
     return ret
+
+
+def get_news_content(data):
+    for i in data:
+        headers = {
+            'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.69 Safari/537.36'
+        }
+        response = requests.get(i['sourceURL'], headers=headers)
+        selector = etree.HTML(response.text)
+        content = selector.xpath(
+            '//section[@class="art_pic_card art_content"]')
+        content = content[0].xpath('string(.)')
+        i['content'] = content
+    return data
+
 
