@@ -41,7 +41,9 @@ def get_news_content(data):
         content = selector.xpath(
             '//section[@class="art_pic_card art_content"]')
         content = content[0].xpath('string(.)')
-        i['content'] = content
+        i['content'] = content.replace('\t', '').replace('\r', '').replace(
+            '\n\n', '').replace('\n', '<br /><br />')
+
     return data
 
 
