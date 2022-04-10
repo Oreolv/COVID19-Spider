@@ -20,6 +20,7 @@ def transform_news_data(data):
         item = {}
         if ('stream' in i['info']):
             continue
+        item['newsId'] = i['base']['newsId']
         item['title'] = i['info']['title']
         item['summary'] = i['info']['intro']
         item['sourceURL'] = i['base']['base']['url']
