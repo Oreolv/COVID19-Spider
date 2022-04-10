@@ -75,7 +75,7 @@ def transform_news_data(data):
         else:
             newsIdList.append(item['newsId'])
             item['title'] = i['info']['title']
-            item['summary'] = i['info']['intro']
+            item['cover'] = i['info']['covers'][0]['url']
             item['sourceURL'] = i['base']['base']['url']
             item['infoSource'] = i['info']['mediaInfo']['name']
             item['publishTime'] = i['info']['showTime']
@@ -98,7 +98,7 @@ def get_news_content(data):
             if (j.tag == 'p'):
                 new_content.append(j.xpath('string(.)'))
             if (j.tag == 'a'):
-                url = 'https://' + j.xpath('//img/@data-src')[0]
+                url = 'https:' + j.xpath('//img/@data-src')[0]
                 new_content.append('<img src="' + url + '" />')
         new_content = '\n'.join(new_content).replace('\t', '').replace(
             '\r', '').replace('\n\n', '')
@@ -116,14 +116,14 @@ def remove_same_data(data):
 
 
 def write_news_mysql(data):
-    sql = 'insert into news (content, publishTime, title,summary, infoSource, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s);'
+    sql = 'insert into news (newsId,content, publishTime, title, cover, infoSource, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s);'
     conn, cursor = util.get_mysql_connection()
     for i in data:
         dt = util.get_strftime()
         cursor.execute(sql,
-                       (i['content'], util.transform_strftime(
-                           i['publishTime']), i['title'], i['summary'],
-                        i['infoSource'], i['sourceURL'], dt, dt))
+                       (i['newsId'], i['content'],
+                        util.transform_strftime(i['publishTime']), i['title'],
+                        i['cover'], i['infoSource'], i['sourceURL'], dt, dt))
         conn.commit()
         print('插入成功:' + i['title'])
     cursor.close()
