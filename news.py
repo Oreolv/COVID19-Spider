@@ -115,12 +115,27 @@ def remove_same_data(data):
     return data
 
 
+def write_news_mysql(data):
+    sql = 'insert into news (content, publishTime, title,summary, infoSource, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s);'
+    conn, cursor = util.get_mysql_connection()
+    for i in data:
+        dt = util.get_strftime()
+        cursor.execute(sql,
+                       (i['content'], util.transform_strftime(
+                           i['publishTime']), i['title'], i['summary'],
+                        i['infoSource'], i['sourceURL'], dt, dt))
+        conn.commit()
+        print('插入成功:' + i['title'])
+    cursor.close()
+    conn.close()
+
+
 def get_news_list():
     data = get_news()
     data = transform_news_data(data)
     data = remove_same_data(data)
     data = get_news_content(data)
-    util.write_mysql(data)
+    write_news_mysql(data)
     # 合并数据
     data = data + old_data
     print('所有数据获取完毕')

@@ -42,7 +42,7 @@ def transform_strftime(time_stamp):
     return str_date
 
 
-def write_mysql(data):
+def get_mysql_connection():
     conn = pymysql.Connect(
         host='localhost',
         port=3306,
@@ -51,16 +51,6 @@ def write_mysql(data):
         db='guard',
         charset='utf8',
     )
-    sql = 'insert into news (content, publishTime, title,summary, infoSource, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s);'
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     cursor.execute('SET CHARACTER SET utf8;')
-
-    for i in data:
-        dt = get_strftime()
-        cursor.execute(
-            sql,
-            (i['content'], transform_strftime(i['publishTime']), i['title'],
-             i['summary'], i['infoSource'], i['sourceURL'], dt, dt))
-        conn.commit()
-        print('插入成功:' + i['title'])
-    conn.close()
+    return conn, cursor
