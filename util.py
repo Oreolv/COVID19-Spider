@@ -1,4 +1,5 @@
 import json
+import time
 import hashlib
 
 
@@ -20,3 +21,7 @@ def read_json_data(dir):
 def get_sha256_str(data):
     str = hashlib.sha256(data.encode('utf-8')).hexdigest()
     return str
+
+
+def get_timestamp():
+    return int(round(time.time() * 1000))
