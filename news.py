@@ -51,7 +51,6 @@ def get_news():
 
         data = requests.get(url=url, headers=headers,
                             params=params).json()['result']['data']
-        time.sleep(0.5)
         if (len(data) > 0):
             first_data = first_data + data
             print('获取第' + str(i) + '页数据')
