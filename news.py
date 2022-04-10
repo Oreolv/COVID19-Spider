@@ -99,7 +99,7 @@ def get_news_content(data):
                 new_content.append(j.xpath('string(.)'))
             if (j.tag == 'a'):
                 url = 'https://' + j.xpath('//img/@data-src')[0]
-                new_content.append('<img src="' + url + '"')
+                new_content.append('<img src="' + url + '" />')
         new_content = '\n'.join(new_content).replace('\t', '').replace(
             '\r', '').replace('\n\n', '')
         i['content'] = new_content
