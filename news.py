@@ -40,10 +40,16 @@ def get_news_content(data):
         selector = etree.HTML(response.text)
         content = selector.xpath(
             '//section[@class="art_pic_card art_content"]')
-        content = content[0].xpath('string(.)')
-        i['content'] = content.replace('\t', '').replace('\r', '').replace(
-            '\n\n', '').replace('\n', '<br /><br />')
-
+        new_content = []
+        for j in content[0].xpath('*'):
+            if (j.tag == 'p'):
+                new_content.append(j.xpath('string(.)'))
+            if (j.tag == 'a'):
+                url = 'https://' + j.xpath('//img/@data-src')[0]
+                new_content.append('<img src="' + url + '"')
+        new_content = '\n'.join(new_content).replace('\t', '').replace(
+            '\r', '').replace('\n\n', '')
+        i['content'] = new_content
     return data
 
 
