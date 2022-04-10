@@ -84,7 +84,7 @@ def transform_news_data(data):
 
 
 def get_news_content(data):
-    for i in data:
+    for idx, i in enumerate(data):
         headers = {
             'user-agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.69 Safari/537.36'
@@ -103,6 +103,8 @@ def get_news_content(data):
         new_content = '\n'.join(new_content).replace('\t', '').replace(
             '\r', '').replace('\n\n', '')
         i['content'] = new_content
+        print('第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
+    data = data + old_data
     return data
 
 
