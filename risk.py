@@ -123,6 +123,7 @@ def get_risk_area():
         data['last_hcount'] = last_data['hcount']
         data['last_mcount'] = last_data['mcount']
     # return transform_risk_area(data)
+    print('疫情风险地区数据获取成功')
     return add_id_risk_area(data)
 
 

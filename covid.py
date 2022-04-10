@@ -89,4 +89,5 @@ def get_all_data():
         'province_data': province_data,
         'city_data': city_data
     }
+    print('疫情风险数据获取成功')
     return all_data
