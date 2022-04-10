@@ -120,6 +120,7 @@ def get_news_list():
     data = transform_news_data(data)
     data = remove_same_data(data)
     data = get_news_content(data)
+    util.write_mysql(data)
     # 合并数据
     data = data + old_data
     print('所有数据获取完毕')
