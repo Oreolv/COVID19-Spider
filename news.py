@@ -95,11 +95,25 @@ def get_news_content(data):
         new_content = []
         for j in content[0].xpath('*'):
             if (j.tag == 'p'):
-                new_content.append(j.xpath('string(.)'))
+                strong = j.xpath('./strong//text()')
+                text = j.xpath('string(.)')
+                if (len(strong) > 0):
+                    text = "<div class='title'><strong>" + strong[0].strip(
+                    ) + "</strong></div>"
+                    new_content.append(text)
+                else:
+                    p = "<div class='section'>" + text + "</div>"
+                new_content.append(p)
+
             if (j.tag == 'a'):
-                url = 'https:' + j.xpath('.//img/@data-src')[0]
+                img = j.xpath('.//img/@data-src')
+                alt = j.xpath('.//h2[@class="art_img_tit"]//text()')
+                url = 'https:' + img[0].strip()
                 new_content.append('<img src="' + url + '" />')
-        new_content = '\n'.join(new_content).replace('\t', '').replace(
+                if (len(alt) > 0):
+                    new_content.append("<div class='img_alt'>" +
+                                       alt[0].strip() + "</div>")
+        new_content = '<br />'.join(new_content).replace('\t', '').replace(
             '\r', '').replace('\n\n', '')
         i['content'] = new_content
         print('获取第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
