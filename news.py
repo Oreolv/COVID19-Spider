@@ -1,7 +1,10 @@
+import json
 import util
 import time
 import requests
 from lxml import etree
+
+old_data = util.read_json_data('news_list')
 
 
 # 通过新浪新闻获取新闻数据
@@ -41,7 +44,7 @@ def get_news():
     url = 'https://feeds.sina.cn/api/v4/tianyi'
     first_data = requests.get(url=url, headers=headers,
                               params=params).json()['result']['data']
-    for i in range(1, 3):
+    for i in range(1, 100):
         params['action'] = 1
         params['up'] = i
         url = 'https://feeds.sina.cn/api/v4/tianyi'
@@ -71,12 +74,12 @@ def transform_news_data(data):
             continue
         else:
             newsIdList.append(item['newsId'])
-        item['title'] = i['info']['title']
-        item['summary'] = i['info']['intro']
-        item['sourceURL'] = i['base']['base']['url']
-        item['infoSource'] = i['info']['mediaInfo']['name']
-        item['publishTime'] = i['info']['showTime']
-        ret.append(item)
+            item['title'] = i['info']['title']
+            item['summary'] = i['info']['intro']
+            item['sourceURL'] = i['base']['base']['url']
+            item['infoSource'] = i['info']['mediaInfo']['name']
+            item['publishTime'] = i['info']['showTime']
+            ret.append(item)
     return ret
 
 
@@ -103,3 +106,17 @@ def get_news_content(data):
     return data
 
 
+def remove_same_data(data):
+    for i in data[:]:
+        if (i['newsId'] in json.dumps(old_data)):
+            data.remove(i)
+    print('新增' + str(len(data)) + '条数据')
+    return data
+
+
+def get_news_list():
+    data = get_news()
+    data = transform_news_data(data)
+    data = remove_same_data(data)
+    data = get_news_content(data)
+    return data
