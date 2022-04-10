@@ -103,7 +103,7 @@ def get_news_content(data):
         new_content = '\n'.join(new_content).replace('\t', '').replace(
             '\r', '').replace('\n\n', '')
         i['content'] = new_content
-        print('第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
+        print('获取第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
     data = data + old_data
     return data
 
@@ -121,4 +121,5 @@ def get_news_list():
     data = transform_news_data(data)
     data = remove_same_data(data)
     data = get_news_content(data)
+    print('所有数据获取完毕')
     return data
