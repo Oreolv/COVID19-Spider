@@ -27,6 +27,7 @@ def transform_tips_data():
             item['tipsId'] = j['id']
             item['type'] = i
             item['title'] = j['q']
+            item['summary'] = j['a']
             item['source'] = j['source']
             item['sourceURL'] = j['linkUrl']
             item['publisher'] = 6  #默认发布用户
@@ -82,14 +83,14 @@ def remove_same_data(data):
 
 
 def write_tips_mysql(data):
-    sql = 'replace into tips (tipsId, content, source, publisher, publishTime, title, type, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+    sql = 'replace into tips (tipsId, content, source, publisher, publishTime, title, summary, type, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
     conn, cursor = util.get_mysql_connection()
     for i in data:
         dt = util.get_strftime()
         cursor.execute(sql,
                        (i['tipsId'], i['content'], i['source'], i['publisher'],
                         util.transform_strftime(i['publishTime']), i['title'],
-                        i['type'], i['sourceURL'], dt, dt))
+                        i['summary'], i['type'], i['sourceURL'], dt, dt))
         conn.commit()
         print('插入成功:' + i['title'])
     cursor.close()
