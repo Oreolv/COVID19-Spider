@@ -119,7 +119,8 @@ def get_risk_area():
     data = requests.post(url, headers=headers, json=payload).json()['data']
 
     last_data = util.read_json_data('risk_area')
-    if last_data['end_update_time'] != data['end_update_time']:
+    if (len(last_data) > 0
+            and last_data['end_update_time'] != data['end_update_time']):
         data['last_hcount'] = last_data['hcount']
         data['last_mcount'] = last_data['mcount']
     # return transform_risk_area(data)

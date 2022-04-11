@@ -1,3 +1,4 @@
+import os
 import json
 import time
 import hashlib
@@ -12,6 +13,8 @@ def write_json(dir, data):
 
 
 def read_json_data(dir):
+    if (not os.path.isfile('../Guard-Server/static/{}.json'.format(dir))):
+        write_json(dir, [])
     with open('../Guard-Server/static/{}.json'.format(dir),
               'r',
               encoding='utf-8') as f:
