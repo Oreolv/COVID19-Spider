@@ -118,7 +118,9 @@ def get_news_content(data):
                 img = j.xpath('.//img/@data-src')
                 alt = j.xpath('.//h2[@class="art_img_tit"]//text()')
                 url = 'https:' + img[0].strip()
-                new_content.append('<img src="' + url + '" />')
+                new_content.append(
+                    '<div class="img_div"><img mode="widthFix" src="' + url +
+                                   '" /></div>')
                 if (len(alt) > 0):
                     new_content.append("<div class='img_alt'>" +
                                        alt[0].strip() + "</div>")
