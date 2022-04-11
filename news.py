@@ -120,7 +120,7 @@ def get_news_content(data):
                 url = 'https:' + img[0].strip()
                 new_content.append(
                     '<div class="img_div"><img mode="widthFix" src="' + url +
-                                   '" /></div>')
+                    '" /></div>')
                 if (len(alt) > 0):
                     new_content.append("<div class='img_alt'>" +
                                        alt[0].strip() + "</div>")
@@ -140,7 +140,7 @@ def remove_same_data(data):
 
 
 def write_news_mysql(data):
-    sql = 'insert into news (newsId,content, publishTime, title, cover, mediaInfo, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+    sql = 'replace into news (newsId,content, publishTime, title, cover, mediaInfo, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s);'
     conn, cursor = util.get_mysql_connection()
     for i in data:
         dt = util.get_strftime()
