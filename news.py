@@ -111,7 +111,7 @@ def get_news_content(data):
                     ) + "</strong></div>"
                     new_content.append(text)
                 else:
-                    p = "<div class='section'>" + text + "</div>"
+                    p = "<div class='section'>" + text.strip() + "</div>"
                 new_content.append(p)
 
             if (j.tag == 'a'):
@@ -125,7 +125,7 @@ def get_news_content(data):
                     new_content.append("<div class='img_alt'>" +
                                        alt[0].strip() + "</div>")
         new_content = '<br />'.join(new_content).replace('\t', '').replace(
-            '\r', '').replace('\n\n', '')
+            '\r', '').replace('\n', '')
         i['content'] = new_content
         print('获取第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
     return data

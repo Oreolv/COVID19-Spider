@@ -58,7 +58,7 @@ def get_tips_content(data):
                 ) + "</strong></div>"
                 new_content.append(text)
             else:
-                p = "<div class='section'>" + text + "</div>"
+                p = "<div class='section'>" + text.strip() + "</div>"
             new_content.append(p)
 
             img = j.xpath('.//img/@data-original-src')
@@ -67,7 +67,7 @@ def get_tips_content(data):
                     '<div class="img_div"><img mode="widthFix" src="' +
                     img[0].strip() + '" /></div>')
         new_content = '<br />'.join(new_content).replace('\t', '').replace(
-            '\r', '').replace('\n\n', '')
+            '\r', '').replace('\n', '')
         i['content'] = new_content
         print('获取第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
     return data
