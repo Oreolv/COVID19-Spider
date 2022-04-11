@@ -40,6 +40,8 @@ def get_strftime():
 
 def transform_strftime(time_stamp):
     time_stamp = int(time_stamp)
+    if (len(str(time_stamp))):
+        time_stamp = int(time_stamp / 1000)
     time_array = time.localtime(time_stamp)
     str_date = time.strftime("%Y-%m-%d %H:%M:%S", time_array)
     return str_date
