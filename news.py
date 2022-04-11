@@ -76,7 +76,12 @@ def transform_news_data(data):
             item['title'] = i['info']['title']
             item['cover'] = i['info']['covers'][0]['url']
             item['sourceURL'] = i['base']['base']['url']
-            item['infoSource'] = i['info']['mediaInfo']['name']
+            item['mediaInfo'] = json.dumps({
+                "name":
+                i['info']['mediaInfo']['name'],
+                "avatar":
+                i['info']['mediaInfo']['avatar']
+            })
             item['publishTime'] = i['info']['showTime']
             ret.append(item)
     return ret
@@ -129,14 +134,14 @@ def remove_same_data(data):
 
 
 def write_news_mysql(data):
-    sql = 'insert into news (newsId,content, publishTime, title, cover, infoSource, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+    sql = 'insert into news (newsId,content, publishTime, title, cover, mediaInfo, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s);'
     conn, cursor = util.get_mysql_connection()
     for i in data:
         dt = util.get_strftime()
         cursor.execute(sql,
                        (i['newsId'], i['content'],
                         util.transform_strftime(i['publishTime']), i['title'],
-                        i['cover'], i['infoSource'], i['sourceURL'], dt, dt))
+                        i['cover'], i['mediaInfo'], i['sourceURL'], dt, dt))
         conn.commit()
         print('插入成功:' + i['title'])
     cursor.close()
