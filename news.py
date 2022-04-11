@@ -76,12 +76,16 @@ def transform_news_data(data):
             item['title'] = i['info']['title']
             item['cover'] = i['info']['covers'][0]['url']
             item['sourceURL'] = i['base']['base']['url']
-            item['mediaInfo'] = json.dumps({
-                "name":
-                i['info']['mediaInfo']['name'],
-                "avatar":
-                i['info']['mediaInfo']['avatar']
-            })
+            mediaInfo = {
+                "name": i['info']['mediaInfo']['name'],
+                "avatar": i['info']['mediaInfo']['avatar']
+            }
+            if ("description" in i['info']['mediaInfo']):
+                mediaInfo['description'] = i['info']['mediaInfo'][
+                    'description']
+            else:
+                mediaInfo['description'] = ""
+            item['mediaInfo'] = json.dumps(mediaInfo)
             item['publishTime'] = i['info']['showTime']
             ret.append(item)
     return ret
