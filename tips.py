@@ -38,7 +38,7 @@ def transform_tips_data():
 
 
 def get_tips_content(data):
-    for idx, i in enumerate(data):
+    for idx, i in enumerate(data[:]):
         headers = {
             'user-agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.69 Safari/537.36'
@@ -47,6 +47,7 @@ def get_tips_content(data):
         selector = etree.HTML(response.text)
         content = selector.xpath('//div[@class="rd-issue_wrap"]')
         if (len(content) == 0):
+            data.remove(i)
             continue
         new_content = []
         for j in content[0].xpath('*'):
@@ -71,3 +72,36 @@ def get_tips_content(data):
         print('获取第' + str(idx + 1) + '条数据内容成功，标题为' + i['title'])
     return data
 
+
+def remove_same_data(data):
+    for i in data[:]:
+        if (i['tipsId'] in json.dumps(old_data)):
+            data.remove(i)
+    print('新增' + str(len(data)) + '条数据')
+    return data
+
+
+def write_tips_mysql(data):
+    sql = 'replace into tips (tipsId, content, source, publisher, publishTime, title, type, sourceURL, createdAt, updatedAt) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+    conn, cursor = util.get_mysql_connection()
+    for i in data:
+        dt = util.get_strftime()
+        cursor.execute(sql,
+                       (i['tipsId'], i['content'], i['source'], i['publisher'],
+                        util.transform_strftime(i['publishTime']), i['title'],
+                        i['type'], i['sourceURL'], dt, dt))
+        conn.commit()
+        print('插入成功:' + i['title'])
+    cursor.close()
+    conn.close()
+
+
+def get_tips_list():
+    data = transform_tips_data()
+    data = remove_same_data(data)
+    data = get_tips_content(data)
+    write_tips_mysql(data)
+    # 合并数据
+    data = data + old_data
+    print('所有数据获取完毕')
+    return data
