@@ -85,7 +85,8 @@ def get_all_data():
     city_data = get_city_data(province_temp_data)
     all_data = {
         'lastUpdateTime': data['lastUpdateTime'],
-        'china_data': china_data,
+        'china_add': china_data[0],
+        'china_total': china_data[1],
         'province_data': province_data,
         'city_data': city_data
     }
